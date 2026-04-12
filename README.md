@@ -43,7 +43,7 @@ ElectionApp is a backend application designed to support election management wor
 ## Database Design
 
 ### ERD Diagram
-![ERD DIAGRAM](../../../resources/assets/ERD_Diagram.png)
+![ERD DIAGRAM](src/main/resources/assets/ERD_Diagram.png)
 
 ### Model Relationships
 
