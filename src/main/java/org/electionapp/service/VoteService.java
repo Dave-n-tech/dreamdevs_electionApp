@@ -1,6 +1,7 @@
 package org.electionapp.service;
 
 import org.electionapp.dto.VoteRequest;
+import org.electionapp.exception.ResourceNotFoundException;
 import org.electionapp.model.*;
 import org.electionapp.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class VoteService {
     public Vote castVote(VoteRequest request) {
 
         Election election = electionRepository.findById(request.getElectionId())
-                .orElseThrow(() -> new RuntimeException("Election not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Election not found"));
 
         if (election.getStatus() != ElectionStatus.ONGOING) {
             throw new RuntimeException("Election is not ongoing");

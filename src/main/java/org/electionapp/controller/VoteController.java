@@ -18,7 +18,11 @@ public class VoteController {
     private final VoteService voteService;
 
     @PostMapping("/elections/{electionId}")
-    public ResponseEntity<Vote> castVote(@RequestBody VoteRequest request) {
+    public ResponseEntity<Vote> castVote(
+            @PathVariable("electionId") String electionId,
+            @RequestBody VoteRequest request) {
+
+        request.setElectionId(electionId);
         return new ResponseEntity<>(voteService.castVote(request), HttpStatus.OK);
     }
 
