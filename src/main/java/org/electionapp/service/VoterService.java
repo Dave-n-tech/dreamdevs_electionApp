@@ -16,17 +16,15 @@ public class VoterService {
     private final VoterRepository voterRepository;
 
     public Voter register(VoterRequest newVoter) {
-        boolean existingVoter = voterRepository.existsByVotingId(newVoter.getVotingId());
 
-        if (existingVoter){
+        if(voterRepository.existsByEmail(newVoter.getEmail())){
             throw new IllegalArgumentException("Voter already exists");
         }
 
         Voter voter = new Voter();
         voter.setName(newVoter.getName().trim().toLowerCase());
         voter.setEmail(newVoter.getEmail());
-        UUID votingID = UUID.randomUUID();
-        voter.setVotingId(votingID);
+        voter.setVotingId(UUID.randomUUID());
 
         return voterRepository.save(voter);
     }

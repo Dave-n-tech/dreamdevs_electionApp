@@ -10,5 +10,5 @@ import java.util.UUID;
 @Repository
 public interface VoterRepository extends MongoRepository<Voter, String> {
     Optional<Voter> findByVotingId(UUID votingId);
-    boolean existsByVotingId(UUID votingId);
+    boolean existsByEmail(String email);
 }
