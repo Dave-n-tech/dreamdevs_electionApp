@@ -48,6 +48,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleInvalidJson(Exception ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body("Malformed JSON request");
+                .body( "Malformed JSON request");
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<String> handleBadRequest(BadRequestException ex){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
     }
 }

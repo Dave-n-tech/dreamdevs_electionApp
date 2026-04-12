@@ -18,7 +18,8 @@ public class CandidateController {
     private final CandidateService candidateService;
 
     @PostMapping("/elections/{electionId}/")
-    public ResponseEntity<Candidate> register(@RequestBody CreateCandidateRequest candidate) {
+    public ResponseEntity<Candidate> register(@PathVariable("electionId") String electionId, @RequestBody CreateCandidateRequest candidate) {
+        candidate.setElectionId(electionId);
         return new ResponseEntity<>(candidateService.registerCandidate(candidate), HttpStatus.CREATED);
     }
 

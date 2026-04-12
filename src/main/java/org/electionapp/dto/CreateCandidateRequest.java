@@ -11,4 +11,7 @@ public class CreateCandidateRequest {
     private String party;
     @NonNull
     private String electionId;
+
+    public CreateCandidateRequest() {
+    }
 }

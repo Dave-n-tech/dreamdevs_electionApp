@@ -1,6 +1,8 @@
 package org.electionapp.service;
 
 import org.electionapp.dto.CreateCandidateRequest;
+import org.electionapp.exception.BadRequestException;
+import org.electionapp.exception.ResourceNotFoundException;
 import org.electionapp.model.Candidate;
 import org.electionapp.repository.CandidateRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,7 @@ public class CandidateService {
     public Candidate registerCandidate(CreateCandidateRequest request) {
 
         if(candidateRepository.existsByNameAndElectionId(request.getName(), request.getElectionId())){
-            throw new RuntimeException("Candidate already registered");
+            throw new BadRequestException("Candidate already registered");
         }
 
         Candidate newCandidate = new Candidate();
@@ -34,6 +36,6 @@ public class CandidateService {
 
     public Candidate getCandidateById(String id){
         return candidateRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Candidate not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Candidate not found"));
     }
 }
