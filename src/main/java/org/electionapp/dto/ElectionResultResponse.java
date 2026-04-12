@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ElectionResultResponse {
-    private String id;
+    private String candidateId;
     private String candidateName;
     private long voteCount;
 }

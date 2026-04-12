@@ -13,6 +13,7 @@ import org.electionapp.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,7 @@ public class ElectionService {
 
         ElectionStatus electionStatus = null;
         if (hasStatus) {
-            electionStatus = ElectionStatus.valueOf(String.valueOf(filterRequest.getStatus()));
+            electionStatus = filterRequest.getStatus();
         }
 
         if (hasStatus && hasStart && hasEnd){
@@ -71,6 +72,15 @@ public class ElectionService {
     }
 
     public Election createElection(CreateElectionRequest request) {
+        if (request.getName() == null || request.getName().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty");
+        }
+
+        if (request.getStartDate().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("Election start date cannot be in the past");
+        }
+
+
         Election election = new Election();
         election.setName(request.getName());
         election.setDescription(request.getDescription());
@@ -85,7 +95,7 @@ public class ElectionService {
         Election election = getElectionById(id);
 
         if (election.getStatus() != ElectionStatus.UPCOMING) {
-            throw new RuntimeException("Only upcoming elections can be started");
+            throw new IllegalArgumentException("Only upcoming elections can be started");
         }
 
         election.setStatus(ElectionStatus.ONGOING);
@@ -96,7 +106,7 @@ public class ElectionService {
         Election election = getElectionById(id);
 
         if (election.getStatus() != ElectionStatus.ONGOING) {
-            throw new RuntimeException("Only ongoing elections can be ended");
+            throw new IllegalArgumentException("Only ongoing elections can be ended");
         }
 
         election.setStatus(ElectionStatus.ENDED);
