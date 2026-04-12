@@ -3,6 +3,7 @@ package org.electionapp.service;
 import org.electionapp.dto.CreateElectionRequest;
 import org.electionapp.dto.ElectionFilterRequest;
 import org.electionapp.dto.ElectionResultResponse;
+import org.electionapp.exception.ResourceNotFoundException;
 import org.electionapp.model.Candidate;
 import org.electionapp.model.Election;
 import org.electionapp.model.ElectionStatus;
@@ -68,11 +69,11 @@ public class ElectionService {
 
     public Election getElectionById(String id) {
         return electionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Election not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Election not found"));
     }
 
     public Election createElection(CreateElectionRequest request) {
-        if (request.getName() == null || request.getName().isEmpty()) {
+        if (request.getName().isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
 

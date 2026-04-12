@@ -23,9 +23,9 @@ public class ElectionController {
 
     @GetMapping
     public ResponseEntity<List<Election>> getAll(
-            @RequestParam(required = false) ElectionStatus status,
-            @RequestParam(required = false) LocalDateTime startDate,
-            @RequestParam(required = false) LocalDateTime endDate
+            @RequestParam(name = "status", required = false) ElectionStatus status,
+            @RequestParam(name = "startDate", required = false) LocalDateTime startDate,
+            @RequestParam(name = "endDate", required = false) LocalDateTime endDate
     ) {
         ElectionFilterRequest filterRequest = new ElectionFilterRequest(status, startDate, endDate);
         return ResponseEntity.ok(
@@ -34,7 +34,7 @@ public class ElectionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Election> getById(@PathVariable String id){
+    public ResponseEntity<Election> getById(@PathVariable("id") String id){
         return new ResponseEntity<>(electionService.getElectionById(id), HttpStatus.OK);
     }
 
@@ -45,17 +45,17 @@ public class ElectionController {
     }
 
     @PostMapping("/{id}/start")
-    public ResponseEntity<Election> start(@PathVariable String id) {
+    public ResponseEntity<Election> start(@PathVariable("id") String id) {
         return new ResponseEntity<>(electionService.startElection(id), HttpStatus.OK);
     }
 
     @PostMapping("/{id}/end")
-    public ResponseEntity<Election> end(@PathVariable String id) {
+    public ResponseEntity<Election> end(@PathVariable("id") String id) {
         return new ResponseEntity<>(electionService.endElection(id), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/results")
-    public ResponseEntity<List<ElectionResultResponse>> results(@PathVariable String id) {
+    public ResponseEntity<List<ElectionResultResponse>> results(@PathVariable("id") String id) {
         return new ResponseEntity<>(electionService.getResults(id), HttpStatus.OK);
     }
 }
