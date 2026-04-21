@@ -1,10 +1,12 @@
 package org.electionapp.service;
 
 import org.electionapp.dto.VoteRequest;
+import org.electionapp.exception.BadRequestException;
 import org.electionapp.exception.ResourceNotFoundException;
 import org.electionapp.model.*;
 import org.electionapp.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,8 +26,12 @@ public class VoteService {
         Election election = electionRepository.findById(request.getElectionId())
                 .orElseThrow(() -> new ResourceNotFoundException("Election not found"));
 
-        if (election.getStatus() != ElectionStatus.ONGOING) {
-            throw new RuntimeException("Election is not ongoing");
+        if (election.getStartDate().isAfter(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Election has not started");
+        }
+
+        if (election.getEndDate().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("Election has ended");
         }
 
         Voter voter = voterRepository.findByVotingId(request.getVoterId())

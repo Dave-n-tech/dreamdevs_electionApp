@@ -15,6 +15,5 @@ public class VoteRequest {
     private String electionId;
 
     public VoteRequest() {
-
     }
 }

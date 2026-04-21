@@ -2,6 +2,8 @@ package org.electionapp.controller;
 
 import org.electionapp.dto.VoteRequest;
 import org.electionapp.model.Vote;
+import org.electionapp.model.Voter;
+import org.electionapp.service.SessionService;
 import org.electionapp.service.VoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,14 +18,24 @@ import java.util.List;
 public class VoteController {
 
     private final VoteService voteService;
+    private final SessionService sessionService;
 
     @PostMapping("/elections/{electionId}")
     public ResponseEntity<Vote> castVote(
             @PathVariable("electionId") String electionId,
+            @RequestHeader("Authorization") String authHeader,
             @RequestBody VoteRequest request) {
 
+        String sessionId = authHeader.replace("Bearer ", "");
+        Voter voter = sessionService.getVoter(sessionId);
+
+        if (voter == null) {
+            throw new RuntimeException("Unauthorized");
+        }
+
         request.setElectionId(electionId);
-        return new ResponseEntity<>(voteService.castVote(request), HttpStatus.OK);
+        request.setVoterId(voter.getVotingId());
+        return new ResponseEntity<>(voteService.castVote(request), HttpStatus.CREATED);
     }
 
     @GetMapping("/elections/{electionId}")

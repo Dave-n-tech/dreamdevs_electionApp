@@ -6,7 +6,6 @@ import org.electionapp.dto.ElectionResultResponse;
 import org.electionapp.exception.ResourceNotFoundException;
 import org.electionapp.model.Candidate;
 import org.electionapp.model.Election;
-import org.electionapp.model.ElectionStatus;
 import org.electionapp.model.Vote;
 import org.electionapp.repository.CandidateRepository;
 import org.electionapp.repository.ElectionRepository;
@@ -28,29 +27,11 @@ public class ElectionService {
 
     public List<Election> getAllElections(ElectionFilterRequest filterRequest) {
 
-        boolean hasStatus = filterRequest.getStatus() != null;
         boolean hasStart = filterRequest.getStartDate() != null;
         boolean hasEnd = filterRequest.getEndDate() != null;
 
-        if (!hasStatus && !hasStart && !hasEnd) {
+        if (!hasStart && !hasEnd) {
             return electionRepository.findAll();
-        }
-
-        ElectionStatus electionStatus = null;
-        if (hasStatus) {
-            electionStatus = filterRequest.getStatus();
-        }
-
-        if (hasStatus && hasStart && hasEnd){
-            return electionRepository.findByStatusAndStartDateBetween(
-                    electionStatus,
-                    filterRequest.getStartDate(),
-                    filterRequest.getEndDate()
-            );
-        }
-
-        if (hasStatus) {
-            return electionRepository.findByStatus(electionStatus);
         }
 
         if (hasStart && hasEnd){
@@ -87,30 +68,7 @@ public class ElectionService {
         election.setDescription(request.getDescription());
         election.setStartDate(request.getStartDate());
         election.setEndDate(request.getEndDate());
-        election.setStatus(request.getStatus());
 
-        return electionRepository.save(election);
-    }
-
-    public Election startElection(String id) {
-        Election election = getElectionById(id);
-
-        if (election.getStatus() != ElectionStatus.UPCOMING) {
-            throw new IllegalArgumentException("Only upcoming elections can be started");
-        }
-
-        election.setStatus(ElectionStatus.ONGOING);
-        return electionRepository.save(election);
-    }
-
-    public Election endElection(String id) {
-        Election election = getElectionById(id);
-
-        if (election.getStatus() != ElectionStatus.ONGOING) {
-            throw new IllegalArgumentException("Only ongoing elections can be ended");
-        }
-
-        election.setStatus(ElectionStatus.ENDED);
         return electionRepository.save(election);
     }
 
@@ -118,8 +76,8 @@ public class ElectionService {
 
         Election election = getElectionById(electionId);
 
-        if (election.getStatus() != ElectionStatus.ENDED) {
-            throw new RuntimeException("Election must be ended to view results");
+        if (election.getEndDate().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Election date must have passed to view results");
         }
 
         List<Vote> votes = voteRepository.findByElectionId(electionId);

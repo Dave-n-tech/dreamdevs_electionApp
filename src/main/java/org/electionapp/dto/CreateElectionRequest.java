@@ -2,7 +2,6 @@ package org.electionapp.dto;
 
 import lombok.Data;
 import lombok.NonNull;
-import org.electionapp.model.ElectionStatus;
 
 import java.time.LocalDateTime;
 
@@ -15,8 +14,6 @@ public class CreateElectionRequest {
     private LocalDateTime startDate;
     @NonNull
     private LocalDateTime endDate;
-    @NonNull
-    private ElectionStatus status;
 
     public CreateElectionRequest() {
     }

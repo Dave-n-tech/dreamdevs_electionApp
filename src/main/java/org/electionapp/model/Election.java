@@ -17,6 +17,4 @@ public class Election {
 
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-
-    private ElectionStatus status = ElectionStatus.UPCOMING;
 }
