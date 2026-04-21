@@ -6,7 +6,6 @@ import org.electionapp.exception.ResourceNotFoundException;
 import org.electionapp.model.Voter;
 import org.electionapp.repository.VoterRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

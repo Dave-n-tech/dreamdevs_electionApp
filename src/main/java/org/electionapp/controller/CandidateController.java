@@ -17,13 +17,13 @@ public class CandidateController {
 
     private final CandidateService candidateService;
 
-    @PostMapping("/elections/{electionId}/")
+    @PostMapping("/elections/{electionId}")
     public ResponseEntity<Candidate> register(@PathVariable("electionId") String electionId, @RequestBody CreateCandidateRequest candidate) {
         candidate.setElectionId(electionId);
         return new ResponseEntity<>(candidateService.registerCandidate(candidate), HttpStatus.CREATED);
     }
 
-    @GetMapping("/elections/{electionId}/")
+    @GetMapping("/elections/{electionId}")
     public ResponseEntity<List<Candidate>> getCandidatesByElectionId(@PathVariable String electionId) {
         return new ResponseEntity<>(candidateService.getCandidatesByElectionId(electionId), HttpStatus.OK);
     }

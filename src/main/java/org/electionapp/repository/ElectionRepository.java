@@ -11,5 +11,4 @@ import java.util.List;
 public interface ElectionRepository extends MongoRepository<Election, String> {
     List<Election> findByStartDateBetween(LocalDateTime start, LocalDateTime end);
     List<Election> findByStartDateAfter(LocalDateTime start);
-    List<Election> findByStartDateBefore(LocalDateTime end);
 }

@@ -1,12 +1,10 @@
 package org.electionapp.service;
 
 import org.electionapp.dto.VoteRequest;
-import org.electionapp.exception.BadRequestException;
 import org.electionapp.exception.ResourceNotFoundException;
 import org.electionapp.model.*;
 import org.electionapp.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
